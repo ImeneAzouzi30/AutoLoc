@@ -20,6 +20,9 @@ public class Employe {
     @Column(nullable = false, length = 20)
     private RoleEmploye role;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Agence agence;
+
     public Employe() {
     }
 
@@ -28,6 +31,14 @@ public class Employe {
         this.nom = nom;
         this.prenom = prenom;
         this.role = role;
+    }
+
+    public Employe(Long idEmploye, String nom, String prenom, RoleEmploye role, Agence agence) {
+        this.idEmploye = idEmploye;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.role = role;
+        this.agence = agence;
     }
 
     public Long getIdEmploye() {
@@ -60,5 +71,13 @@ public class Employe {
 
     public void setRole(RoleEmploye role) {
         this.role = role;
+    }
+
+    public Agence getAgence() {
+        return agence;
+    }
+
+    public void setAgence(Agence agence) {
+        this.agence = agence;
     }
 }

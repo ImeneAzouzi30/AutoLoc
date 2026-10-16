@@ -21,6 +21,15 @@ public class Reservation {
     @Column(nullable = false, length = 20)
     private StatutReservation statut;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Client client;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Vehicule vehicule;
+
+    @OneToOne(mappedBy = "reservation", fetch = FetchType.LAZY)
+    private Contrat contrat;
+
     public Reservation() {
     }
 
@@ -29,6 +38,17 @@ public class Reservation {
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.statut = statut;
+    }
+
+    public Reservation(Long idReservation, LocalDate dateDebut, LocalDate dateFin, StatutReservation statut,
+                       Client client, Vehicule vehicule, Contrat contrat) {
+        this.idReservation = idReservation;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.statut = statut;
+        this.client = client;
+        this.vehicule = vehicule;
+        this.contrat = contrat;
     }
 
     public Long getIdReservation() {
@@ -61,5 +81,29 @@ public class Reservation {
 
     public void setStatut(StatutReservation statut) {
         this.statut = statut;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Vehicule getVehicule() {
+        return vehicule;
+    }
+
+    public void setVehicule(Vehicule vehicule) {
+        this.vehicule = vehicule;
+    }
+
+    public Contrat getContrat() {
+        return contrat;
+    }
+
+    public void setContrat(Contrat contrat) {
+        this.contrat = contrat;
     }
 }

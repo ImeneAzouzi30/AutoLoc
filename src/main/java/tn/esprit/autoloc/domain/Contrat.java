@@ -3,6 +3,8 @@ package tn.esprit.autoloc.domain;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "contrat")
@@ -21,6 +23,13 @@ public class Contrat {
     @Column(nullable = false)
     private boolean valide;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id_reservation")
+    private Reservation reservation;
+
+    @OneToMany(mappedBy = "contrat", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Paiement> paiements = new ArrayList<>();
+
     public Contrat() {
     }
 
@@ -29,6 +38,16 @@ public class Contrat {
         this.dateSignature = dateSignature;
         this.montantTotal = montantTotal;
         this.valide = valide;
+    }
+
+    public Contrat(Long idContrat, LocalDate dateSignature, BigDecimal montantTotal, boolean valide,
+                   Reservation reservation, List<Paiement> paiements) {
+        this.idContrat = idContrat;
+        this.dateSignature = dateSignature;
+        this.montantTotal = montantTotal;
+        this.valide = valide;
+        this.reservation = reservation;
+        this.paiements = (paiements != null) ? paiements : new ArrayList<>();
     }
 
     public Long getIdContrat() {
@@ -61,5 +80,35 @@ public class Contrat {
 
     public void setValide(boolean valide) {
         this.valide = valide;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
+
+    public List<Paiement> getPaiements() {
+        return paiements;
+    }
+
+    public void setPaiements(List<Paiement> paiements) {
+        this.paiements = paiements;
+    }
+
+    public void addPaiement(Paiement paiement) {
+        if (paiement != null) {
+            this.paiements.add(paiement);
+            paiement.setContrat(this);
+        }
+    }
+
+    public void removePaiement(Paiement paiement) {
+        if (paiement != null) {
+            this.paiements.remove(paiement);
+            paiement.setContrat(null);
+        }
     }
 }

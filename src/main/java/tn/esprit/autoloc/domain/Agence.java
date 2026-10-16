@@ -1,6 +1,8 @@
 package tn.esprit.autoloc.domain;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "agence")
@@ -21,6 +23,12 @@ public class Agence {
 
     @Column(length = 20)
     private String telephone;
+
+    @OneToMany(mappedBy = "agence", fetch = FetchType.LAZY)
+    private List<Employe> employes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "agence", fetch = FetchType.LAZY)
+    private List<Vehicule> vehicules = new ArrayList<>();
 
     public Agence() {
     }
@@ -71,5 +79,49 @@ public class Agence {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public List<Employe> getEmployes() {
+        return employes;
+    }
+
+    public void setEmployes(List<Employe> employes) {
+        this.employes = employes;
+    }
+
+    public List<Vehicule> getVehicules() {
+        return vehicules;
+    }
+
+    public void setVehicules(List<Vehicule> vehicules) {
+        this.vehicules = vehicules;
+    }
+
+    public void addEmploye(Employe employe) {
+        if (employe != null) {
+            this.employes.add(employe);
+            employe.setAgence(this);
+        }
+    }
+
+    public void removeEmploye(Employe employe) {
+        if (employe != null) {
+            this.employes.remove(employe);
+            employe.setAgence(null);
+        }
+    }
+
+    public void addVehicule(Vehicule vehicule) {
+        if (vehicule != null) {
+            this.vehicules.add(vehicule);
+            vehicule.setAgence(this);
+        }
+    }
+
+    public void removeVehicule(Vehicule vehicule) {
+        if (vehicule != null) {
+            this.vehicules.remove(vehicule);
+            vehicule.setAgence(null);
+        }
     }
 }

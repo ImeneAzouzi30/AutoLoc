@@ -22,6 +22,9 @@ public class Paiement {
     @Column(nullable = false, length = 20)
     private ModePaiement modePaiement;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Contrat contrat;
+
     public Paiement() {
     }
 
@@ -30,6 +33,14 @@ public class Paiement {
         this.montant = montant;
         this.datePaiement = datePaiement;
         this.modePaiement = modePaiement;
+    }
+
+    public Paiement(Long idPaiement, BigDecimal montant, LocalDate datePaiement, ModePaiement modePaiement, Contrat contrat) {
+        this.idPaiement = idPaiement;
+        this.montant = montant;
+        this.datePaiement = datePaiement;
+        this.modePaiement = modePaiement;
+        this.contrat = contrat;
     }
 
     public Long getIdPaiement() {
@@ -62,5 +73,13 @@ public class Paiement {
 
     public void setModePaiement(ModePaiement modePaiement) {
         this.modePaiement = modePaiement;
+    }
+
+    public Contrat getContrat() {
+        return contrat;
+    }
+
+    public void setContrat(Contrat contrat) {
+        this.contrat = contrat;
     }
 }

@@ -1,6 +1,8 @@
 package tn.esprit.autoloc.domain;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "equipement")
@@ -12,6 +14,9 @@ public class Equipement {
 
     @Column(nullable = false, length = 100)
     private String libelle;
+
+    @ManyToMany(mappedBy = "equipements", fetch = FetchType.LAZY)
+    private List<Vehicule> vehicules = new ArrayList<>();
 
     public Equipement() {
     }
@@ -35,5 +40,13 @@ public class Equipement {
 
     public void setLibelle(String libelle) {
         this.libelle = libelle;
+    }
+
+    public List<Vehicule> getVehicules() {
+        return vehicules;
+    }
+
+    public void setVehicules(List<Vehicule> vehicules) {
+        this.vehicules = vehicules;
     }
 }

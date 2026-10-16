@@ -2,6 +2,8 @@ package tn.esprit.autoloc.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -28,6 +30,9 @@ public class Client {
 
     @Column(nullable = false)
     private LocalDate dateInscription;
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<Reservation> reservations = new ArrayList<>();
 
     public Client() {
     }
@@ -97,5 +102,27 @@ public class Client {
 
     public void setDateInscription(LocalDate dateInscription) {
         this.dateInscription = dateInscription;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public void addReservation(Reservation reservation) {
+        if (reservation != null) {
+            this.reservations.add(reservation);
+            reservation.setClient(this);
+        }
+    }
+
+    public void removeReservation(Reservation reservation) {
+        if (reservation != null) {
+            this.reservations.remove(reservation);
+            reservation.setClient(null);
+        }
     }
 }

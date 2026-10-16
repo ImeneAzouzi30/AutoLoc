@@ -19,6 +19,9 @@ public class Maintenance {
     @Column(length = 255)
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Vehicule vehicule;
+
     public Maintenance() {
     }
 
@@ -27,6 +30,14 @@ public class Maintenance {
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.description = description;
+    }
+
+    public Maintenance(Long idMaintenance, LocalDate dateDebut, LocalDate dateFin, String description, Vehicule vehicule) {
+        this.idMaintenance = idMaintenance;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.description = description;
+        this.vehicule = vehicule;
     }
 
     public Long getIdMaintenance() {
@@ -59,5 +70,13 @@ public class Maintenance {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Vehicule getVehicule() {
+        return vehicule;
+    }
+
+    public void setVehicule(Vehicule vehicule) {
+        this.vehicule = vehicule;
     }
 }
