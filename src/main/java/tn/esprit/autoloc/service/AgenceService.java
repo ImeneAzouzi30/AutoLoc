@@ -47,4 +47,5 @@ public class AgenceService implements IAgenceService {
     public void deleteAllAgences() {
         agenceRepository.deleteAll();
     }
+
 }

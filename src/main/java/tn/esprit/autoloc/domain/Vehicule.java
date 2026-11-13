@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,9 +37,11 @@ public class Vehicule {
     @ManyToOne(fetch = FetchType.LAZY)
     private Agence agence;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Maintenance> maintenances = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "vehicule_equipement",
@@ -47,6 +50,7 @@ public class Vehicule {
     )
     private List<Equipement> equipements = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY)
     private List<Reservation> reservations = new ArrayList<>();
 

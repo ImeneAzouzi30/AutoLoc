@@ -62,4 +62,25 @@ public class VehiculeController {
         vehiculeService.deleteAllVehicules();
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/{idVehicule}/agence/{idAgence}")
+    public ResponseEntity<Vehicule> affecterVehicule(
+            @PathVariable("idVehicule") Long idVehicule,
+            @PathVariable("idAgence") Long idAgence) {
+        Vehicule v = vehiculeService.affecterVehicule(idVehicule, idAgence);
+        return ResponseEntity.ok(v);
+    }
+    @PutMapping("/{idVehicule}/equipements/{idEquipement}")
+    public ResponseEntity<Vehicule> affecterEquipement(
+            @PathVariable("idVehicule") Long idVehicule,
+            @PathVariable("idEquipement") Long idEquipement) {
+        Vehicule v = vehiculeService.affecterEquipement(idVehicule, idEquipement);
+        return ResponseEntity.ok(v);
+    }
+    @DeleteMapping("/{idVehicule}/equipements/{idEquipement}")
+    public ResponseEntity<Vehicule> desaffecterEquipement(
+            @PathVariable("idVehicule") Long idVehicule,
+            @PathVariable("idEquipement") Long idEquipement) {
+        Vehicule v = vehiculeService.desaffecterEquipement(idVehicule, idEquipement);
+        return ResponseEntity.ok(v);
+    }
 }
