@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.domain.Employe;
 import tn.esprit.autoloc.service.IEmployeService;
+import tn.esprit.autoloc.web.dto.EmployeDTO;
 
 import java.util.List;
 
@@ -73,5 +74,9 @@ public class EmployeController {
             @PathVariable("idAgence") Long idAgence) {
         Employe emp = employeService.affecterEmploye(idEmploye, idAgence);
         return ResponseEntity.ok(emp);
+    }
+    @GetMapping("/{id}")
+    public EmployeDTO getEmploye(@PathVariable Long id) {
+        return employeService.getEmploye(id);
     }
 }

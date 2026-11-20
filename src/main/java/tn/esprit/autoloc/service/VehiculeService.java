@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.domain.Agence;
@@ -60,9 +61,11 @@ public class VehiculeService implements IVehiculeService {
     }
     // Dans VehiculeService.java (ajouter @Transactional de org.springframework.transaction.annotation.Transactional)
     @Override
-    public Vehicule affecterVehicule(Long idVehicule, Long idAgence) {
-        Vehicule vehicule = vehiculeRepository.findById(idVehicule).get();
-        Agence agence = agenceRepository.findById(idAgence).get();
+    public  Vehicule affecterVehicule(Long idVehicule, Long idAgence) {
+        Vehicule vehicule = vehiculeRepository.findById(idVehicule)
+                .orElseThrow(() -> new EntityNotFoundException("Véhicule introuvable avec l'id : " + idVehicule));
+        Agence agence = agenceRepository.findById(idAgence)
+                .orElseThrow(() -> new EntityNotFoundException("Agence introuvable avec l'id : " + idAgence));
         vehicule.setAgence(agence);
         return vehiculeRepository.save(vehicule);
     }
@@ -70,8 +73,11 @@ public class VehiculeService implements IVehiculeService {
     @Override
 
     public Vehicule affecterEquipement(Long idVehicule, Long idEquipement) {
-        Vehicule vehicule = vehiculeRepository.findById(idVehicule).get();
-        Equipement equipement = equipementRepository.findById(idEquipement).get();
+
+        Vehicule vehicule = vehiculeRepository.findById(idVehicule)
+                .orElseThrow(() -> new EntityNotFoundException("Agence introuvable avec l'id : " + idVehicule));
+        Equipement equipement = equipementRepository.findById(idEquipement)
+                .orElseThrow(() -> new EntityNotFoundException("Equipement introuvable avec l'id : " + idEquipement));
         if (vehicule.getEquipements() == null) {
             vehicule.setEquipements(new ArrayList<>()); // ou new HashSet<>() selon le type dans Vehicule
         }
@@ -82,8 +88,10 @@ public class VehiculeService implements IVehiculeService {
     @Override
 
     public Vehicule desaffecterEquipement(Long idVehicule, Long idEquipement) {
-        Vehicule vehicule = vehiculeRepository.findById(idVehicule).get();
-        Equipement equipement = equipementRepository.findById(idEquipement).get();
+        Vehicule vehicule = vehiculeRepository.findById(idVehicule)
+                .orElseThrow(() -> new EntityNotFoundException("Véhicule introuvable avec l'id : " + idVehicule));
+        Equipement equipement = equipementRepository.findById(idEquipement)
+                .orElseThrow(() -> new EntityNotFoundException("Equipement introuvable avec l'id : " + idEquipement));
         if (vehicule.getEquipements() != null) {
             vehicule.getEquipements().remove(equipement);
         }

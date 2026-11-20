@@ -1,9 +1,13 @@
 package tn.esprit.autoloc.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.esprit.autoloc.web.dto.EmployeDTO;
 import tn.esprit.autoloc.domain.Agence;
 import tn.esprit.autoloc.domain.Employe;
+import tn.esprit.autoloc.mapper.EmployeMapper;
 import tn.esprit.autoloc.repository.AgenceRepository;
 import tn.esprit.autoloc.repository.EmployeRepository;
 
@@ -15,11 +19,13 @@ public class EmployeService implements IEmployeService {
 
        private final EmployeRepository employeRepository;
     private final AgenceRepository agenceRepository;
+    private final EmployeMapper mapper;
 
     @Autowired
-    public EmployeService(EmployeRepository employeRepository, AgenceRepository agenceRepository) {
+    public EmployeService(EmployeRepository employeRepository, AgenceRepository agenceRepository,EmployeMapper mapper) {
         this.employeRepository = employeRepository;
         this.agenceRepository = agenceRepository;
+        this.mapper = mapper;
     }
 
     @Override
@@ -55,18 +61,28 @@ public class EmployeService implements IEmployeService {
     // Dans EmployeService.java
     @Override
     public Employe affecterEmploye(Long idEmploye, Long idAgence) {
-        Employe employe = employeRepository.findById(idEmploye).get();
-        Agence agence = agenceRepository.findById(idAgence).get();
+        Employe employe = employeRepository.findById(idEmploye)
+                .orElseThrow(() -> new EntityNotFoundException("Employe introuvable avec l'id : " + idEmploye));
+        Agence agence = agenceRepository.findById(idAgence)
+                .orElseThrow(() -> new EntityNotFoundException("Agence introuvable avec l'id : " + idAgence));
         employe.setAgence(agence);
         return employeRepository.save(employe);
     }
 
     @Override
+    @Transactional
     public Employe desaffecterEmploye(Long idEmploye) {
-        Employe employe = employeRepository.findById(idEmploye).get();
+        Employe employe = employeRepository.findById(idEmploye)
+                .orElseThrow(() -> new EntityNotFoundException("Employe introuvable avec l'id : " + idEmploye));
+
         employe.setAgence(null);
         return employeRepository.save(employe);
     }
 
-
+    @Override
+    public EmployeDTO getEmploye(Long id) {
+        Employe employe = employeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+        return mapper.toDto(employe);
+    }
 }
